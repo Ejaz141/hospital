@@ -29,8 +29,8 @@ include('./sidebar.php');
             $_SESSION['error'] = "You already added an appointment with this doctor.";
             header("Location: " . "./add_appointment.php");
         } else {
-            $insert_query = "INSERT INTO appointment (appointment_date,appointment_time,doctor_id,status,patient_id,created_at) VALUES ('{$newDate}', '{$appointment_time}', '{$doctor_id}','0','{$patient_id}','{$created_at}')";
-
+            $insert_query = "INSERT INTO appointment (appointment_date,appointment_time,doctor_id,status,prescription,image,patient_id,created_at) VALUES ('{$newDate}', '{$appointment_time}', '{$doctor_id}','0',null,null,'{$patient_id}','{$created_at}')";
+           
             if (mysqli_query($con, $insert_query)) {
                 $_SESSION['msg'] = "Data added successfully";
                 header("Location: " . "./manage_appointment.php");

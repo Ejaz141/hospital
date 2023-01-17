@@ -88,15 +88,14 @@ include('./header.php');
                                                 ?>
                                                 <td><?php echo $row['name']?></td>
                                                                
-                <?php if($session['role'] == 'admin'){?>
-                    
-                    <td>
-                        <select name="approval" id="approval<?php echo $val['id']?>" onchange="approve_appointment('<?php echo $val['id'];?>')">
-                            <option value="1" <?php if($val['status'] == 1){ echo 'selected';}?>>Approve</option>
-                            <option value="0" <?php if($val['status'] == 0){ echo 'selected';}?>>Reject</option>
-                        </select>
-                    </td>
-                    <?php }?>
+                                                <?php if($session['role'] == 'admin'){?>
+                                                    <td>
+                                                        <select name="approval" id="approval<?php echo $val['id']?>" onchange="approve_appointment('<?php echo $val['id'];?>')">
+                                                            <option value="1" <?php if($val['status'] == 1){ echo 'selected';}?>>Approve</option>
+                                                            <option value="0" <?php if($val['status'] == 0){ echo 'selected';}?>>Reject</option>
+                                                        </select>
+                                                    </td>
+                                                    <?php }?>
                                                 <td>
                                                     <?php if($val['status'] == true){?>
                                                         <span class="badge bg-success">Active</span>
@@ -108,67 +107,95 @@ include('./header.php');
                                                 <td>
                                                     <div class="btn-group" role="group" aria-label="Basic outlined example">
                                                         <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#expedit<?php echo $val['id'];?>">Send Message</button>
+                                                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#show_prescription">Show Prescription </button>
                                                     </div>
                                                 </td>
 
                                                 <!-- Edit Expence-->
-        <div class="modal fade" id="expedit<?php echo $val['id'];?>" tabindex="-1"  aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-md modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title  fw-bold" id="expeditLabel"> Send Message </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <?php 
-                    $notification_query = "SELECT * FROM notification where sender_id = '{$session['id']}' OR receiver_id = '{$session['id']}'";
-                    $notification_query_data = mysqli_query($con, $notification_query);
-                    while($notification = mysqli_fetch_assoc($notification_query_data)) {
-                        
-                        
-                        
-                    ?>
-                    <?php if($notification['sender_message']){
-                        $user_row = array(); 
-                        $user_sql = "SELECT * FROM users where id = '{$notification['sender_id']}'";
-                        $user_res = mysqli_query($con, $user_sql);
-                        $user_row = mysqli_fetch_assoc($user_res);
-                        ?>
-                    <div class="mb-3">
-                       <p><span style="color:orange"><?php echo $user_row['name']?>:</span>  <?php echo $notification['sender_message']?></p>
-                    </div>
-                    <?php }?>
-                    <?php if($notification['receiver_message']){
-                        $user_row = array(); 
-                        $user_sql = "SELECT * FROM users where id = '{$notification['receiver_id']}'";
-                        $user_res = mysqli_query($con, $user_sql);
-                        $user_row = mysqli_fetch_assoc($user_res);
-                        ?>
-                    <div class="mb-3">
-                        <p><span style="color:green"><?php echo $user_row['name']?>: </span><?php echo $notification['receiver_message']?></p>
-                    </div>
-                    <?php 
-                    }
-                    }
-                    ?>
-                    <div class="mb-3">
-                        <label for="item1" class="form-label">Message</label>
-                        <input type="hidden" name="sender_id" id="sender_id<?php echo $val['id'];?>" value="<?php echo $session['id'];?>">
-                        <input type="hidden" name="receiver_id" id="receiver_id<?php echo $val['id'];?>" value="<?php echo $val['doctor_id'];?>">
+                                                <div class="modal fade" id="expedit<?php echo $val['id'];?>" tabindex="-1"  aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered modal-md modal-dialog-scrollable">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title  fw-bold" id="expeditLabel"> Send Message </h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <?php 
+                                                                $notification_query = "SELECT * FROM notification where sender_id = '{$session['id']}' OR receiver_id = '{$session['id']}'";
+                                                                $notification_query_data = mysqli_query($con, $notification_query);
+                                                                while($notification = mysqli_fetch_assoc($notification_query_data)) {
+                                                                    
+                                                                    
+                                                                    
+                                                                ?>
+                                                                <?php if($notification['sender_message']){
+                                                                    $user_row = array(); 
+                                                                    $user_sql = "SELECT * FROM users where id = '{$notification['sender_id']}'";
+                                                                    $user_res = mysqli_query($con, $user_sql);
+                                                                    $user_row = mysqli_fetch_assoc($user_res);
+                                                                    ?>
+                                                                <div class="mb-3">
+                                                                <p><span style="color:orange"><?php echo $user_row['name']?>:</span>  <?php echo $notification['sender_message']?></p>
+                                                                </div>
+                                                                <?php }?>
+                                                                <?php if($notification['receiver_message']){
+                                                                    $user_row = array(); 
+                                                                    $user_sql = "SELECT * FROM users where id = '{$notification['receiver_id']}'";
+                                                                    $user_res = mysqli_query($con, $user_sql);
+                                                                    $user_row = mysqli_fetch_assoc($user_res);
+                                                                    ?>
+                                                                <div class="mb-3">
+                                                                    <p><span style="color:green"><?php echo $user_row['name']?>: </span><?php echo $notification['receiver_message']?></p>
+                                                                </div>
+                                                                <?php 
+                                                                }
+                                                                }
+                                                                ?>
+                                                                <div class="mb-3">
+                                                                    <label for="item1" class="form-label">Message</label>
+                                                                    <input type="hidden" name="sender_id" id="sender_id<?php echo $val['id'];?>" value="<?php echo $session['id'];?>">
+                                                                    <input type="hidden" name="receiver_id" id="receiver_id<?php echo $val['id'];?>" value="<?php echo $val['doctor_id'];?>">
 
-                        <textarea  class="form-control" id="message<?php echo $val['id'];?>" rows="3"></textarea> 
-                    </div>
-                   
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" onclick="send_message('<?php echo $val['id'];?>')">Send</button>
-                </div>
-            </div>
-            </div>
-        </div>
+                                                                    <textarea  class="form-control" id="message<?php echo $val['id'];?>" rows="3"></textarea> 
+                                                                </div>
+                                                            
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                <button type="submit" class="btn btn-primary" onclick="send_message('<?php echo $val['id'];?>')">Send</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Edit Expence-->
                                                 
-                                             <tr>
+                                                <div class="modal fade ejaz" id="show_prescription" tabindex="-1"  aria-hidden="true">
+                                                   <div class="modal-dialog modal-dialog-centered modal-md modal-dialog-scrollable">
+                                                   <div class="modal-content">
+                                                       <div class="modal-header">
+                                                           <h5 class="modal-title  fw-bold" id="expeditLabel"> Prescription </h5>
+                                                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                       </div>
+                                                       <div class="modal-body">
+                                                           <div class="mb-3">
+                                                                <h6> <strong>Prescription  : </strong><?php echo $val['prescription'];?></h6>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <?php if($val['image']){?>
+                                                                    <h6> <strong>Prescription Image  : </strong><img src="../assets/images/prescription/<?php echo $val['image'];?>" alt="" width="100px" height="100px"></h6>
+                                                                <?php } ?>
+                                                            </div>
+                                                       
+                                                       </div>
+                                                       <div class="modal-footer">
+                                                           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                           <button type="submit" class="btn btn-primary" onclick="send_message('<?php echo $val['id'];?>')">Send</button>
+                                                       </div>
+                                                   </div>
+                                                   </div>
+                                               </div>
+                                                
+                                                <tr>
                                             <?php 
                                             
                                         }
