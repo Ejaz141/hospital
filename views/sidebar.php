@@ -44,7 +44,6 @@
                         <!-- Menu: Sub menu ul -->
                         <ul class="sub-menu collapse show" id="menu-Doctor">
                             <li><a class="ms-link" href="./manage_doctor.php">All Doctors</a></li>
-                            <li><a class="ms-link" href="./add_doctor.php">Add Doctor</a></li>
                             <li><a class="ms-link" href="./doctor_patient.php">Patients</a></li>
                           
                         </ul>
@@ -57,7 +56,6 @@
                     <!-- Menu: Sub menu ul -->
                     <ul class="sub-menu collapse" id="menu-Patient">
                         <li><a class="ms-link" href="./manage_patient.php">Patient List</a></li>
-                        <li><a class="ms-link" href="./add_patient.php">Add Patient</a></li>
                         <li><a class="ms-link" href="./manage_appointment.php">Appointment</a></li>
                     </ul>
                 </li>

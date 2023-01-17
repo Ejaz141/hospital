@@ -10,7 +10,7 @@ check_login();
 // {
 
 if (isset($_POST['add_doctor'])) {
-    $name = $_POST['firstname'] . ' ' . $_POST['lastname'];
+    $name = $_POST['firstname'];
     $email = $_POST['email'];
     $phonenumber = $_POST['phonenumber'];
     $role = 'Doctor';
@@ -30,7 +30,7 @@ if (isset($_POST['add_doctor'])) {
             $password = md5($password);
 
             $img_location = $_FILES['image']['tmp_name'];
-            $img_name = $_FILES['image']['name'];
+            $img_name = $_FILES['image']['name'].date('dmyhis');
             $img_destination = "../assets/images/store/" . $img_name;
             move_uploaded_file($img_location, $img_destination);
 
@@ -72,14 +72,11 @@ include './header.php';
                             <div class="card-body">
                                 <form action="<?php $_SERVER['PHP_SELF'];?>" method="post" enctype="multipart/form-data">
                                     <div class="row g-3 align-items-center">
-                                        <div class="col-md-6">
-                                            <label for="firstname" class="form-label">First Name</label>
+                                        <div class="col-md-12">
+                                            <label for="firstname" class="form-label">Name</label>
                                             <input type="text" name="firstname" class="form-control" id="firstname" required>
                                         </div>
-                                        <div class="col-md-6">
-                                            <label for="lastname" class="form-label">Last Name</label>
-                                            <input type="text" name="lastname" class="form-control" id="lastname" required>
-                                        </div>
+                                       
                                         <div class="col-md-6">
                                             <label for="phonenumber" class="form-label">Phone Number</label>
                                             <input type="text" name="phonenumber" class="form-control" id="phonenumber" required>
@@ -98,7 +95,7 @@ include './header.php';
                                         </div>
                                         <div class="col-md-6">
                                             <label for="formFileMultiple" class="form-label"> Document Upload</label>
-                                            <input class="form-control" type="file" name="image" id="formFileMultiple" multiple required>
+                                            <input class="form-control" type="file" name="image" id="formFileMultiple" multiple>
                                         </div>
                                         <div class="col-md-6">
                                             <label  class="form-label">Gender</label>
@@ -128,6 +125,7 @@ include './header.php';
                                     </div>
 
                                     <input type="submit" class="btn btn-primary mt-4" name="add_doctor" value="Submit">
+                                    <a href="./manage_doctor.php" class="btn btn-secondary mt-4">Cancel</a>
                                 </form>
                             </div>
                         </div>

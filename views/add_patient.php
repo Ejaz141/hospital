@@ -9,7 +9,7 @@ include('./header.php');
 check_login();
 
 if (isset($_POST['add_patient'])) {
-    $name = $_POST['firstname'] . ' ' . $_POST['lastname'];
+    $name = $_POST['name'];
     $email = $_POST['email'];
     $phonenumber = $_POST['phonenumber'];
     $role = 'Patient';
@@ -28,8 +28,8 @@ if (isset($_POST['add_patient'])) {
             $password = md5($password);
 
             $img_location = $_FILES['image']['tmp_name'];
-            $img_name = $_FILES['image']['name'];
-            $img_destination = "../assets/images/store/" . $img_name;
+            $img_name = $_FILES['image']['name'].date('dmyhis');
+            $img_destination = "../assets/images/patient/" . $img_name;
             move_uploaded_file($img_location, $img_destination);
 
             $insert_query = "INSERT INTO users (name, email,phonenumber, password, role, image, gender, prescription, status) VALUES ('{$name}', '{$email}','{$phonenumber}','{$password}','{$role}','{$img_name}','{$gender}', null, '1')";
@@ -66,14 +66,11 @@ if (isset($_POST['add_patient'])) {
                             <div class="card-body">
                                 <form action="<?php $_SERVER['PHP_SELF'];?>" method="post" enctype="multipart/form-data">
                                     <div class="row g-3 align-items-center">
-                                        <div class="col-md-6">
-                                            <label for="firstname" class="form-label">First Name</label>
-                                            <input type="text" class="form-control" name="firstname" id="firstname" required>
+                                        <div class="col-md-12">
+                                            <label for="firstname" class="form-label">Name</label>
+                                            <input type="text" class="form-control" name="name" id="name" required>
                                         </div>
-                                        <div class="col-md-6">
-                                            <label for="lastname" class="form-label">Last Name</label>
-                                            <input type="text" class="form-control" name="lastname" required>
-                                        </div>
+                                       
                                         <div class="col-md-6">
                                             <label for="phonenumber" class="form-label">Phone Number</label>
                                             <input type="text" name="phonenumber" class="form-control" id="phonenumber" required>
@@ -92,7 +89,7 @@ if (isset($_POST['add_patient'])) {
                                         </div>
                                         <div class="col-md-6">
                                             <label for="formFileMultiple" class="form-label"> Document Upload</label>
-                                            <input class="form-control" name="image" type="file" id="formFileMultiple" multiple required>
+                                            <input class="form-control" name="image" type="file" id="formFileMultiple" multiple>
                                         </div> 
                                         <div class="col-md-6">
                                             <label  class="form-label">Gender</label>
@@ -118,6 +115,7 @@ if (isset($_POST['add_patient'])) {
                                     </div>
                                     
                                     <button type="submit" class="btn btn-primary mt-4" name="add_patient">Submit</button>
+                                    <a href="./manage_patient.php" class="btn btn-secondary mt-4">Cancel</a>
                                 </form>
                             </div>
                         </div>

@@ -89,7 +89,7 @@ $res = mysqli_query($con, $sql);
                                                 </td>
 
                                                 <!-- Edit Expence-->
-        <div class="modal fade" id="expedit<?php echo $val['id'];?>" tabindex="-1"  aria-hidden="true">
+                                                <div class="modal fade" id="expedit<?php echo $val['id'];?>" tabindex="-1"  aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-md modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
@@ -97,10 +97,42 @@ $res = mysqli_query($con, $sql);
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <?php 
+                    $notification_query = "SELECT * FROM notification where sender_id = '{$session['id']}' OR receiver_id = '{$session['id']}'";
+                    $notification_query_data = mysqli_query($con, $notification_query);
+                    while($notification = mysqli_fetch_assoc($notification_query_data)) {
+                        
+                        
+                        
+                    ?>
+                    <?php if($notification['sender_message']){
+                        $user_row = array(); 
+                        $user_sql = "SELECT * FROM users where id = '{$notification['sender_id']}'";
+                        $user_res = mysqli_query($con, $user_sql);
+                        $user_row = mysqli_fetch_assoc($user_res);
+                        ?>
+                    <div class="mb-3">
+                       <p><span style="color:orange"><?php echo $user_row['name']?>:</span>  <?php echo $notification['sender_message']?></p>
+                    </div>
+                    <?php }?>
+                    <?php if($notification['receiver_message']){
+                        $user_row = array(); 
+                        $user_sql = "SELECT * FROM users where id = '{$notification['receiver_id']}'";
+                        $user_res = mysqli_query($con, $user_sql);
+                        $user_row = mysqli_fetch_assoc($user_res);
+                        ?>
+                    <div class="mb-3">
+                        <p><span style="color:green"><?php echo $user_row['name']?>: </span><?php echo $notification['receiver_message']?></p>
+                    </div>
+                    <?php 
+                    }
+                    }
+                    ?>
                     <div class="mb-3">
                         <label for="item1" class="form-label">Message</label>
-                        <input type="hidden" name="sender_id" id="sender_id" value="<?php echo $session['id'];?>">
-                        <input type="hidden" name="receiver_id" id="receiver_id" value="<?php echo $val['patient_id'];?>">
+                        <input type="hidden" name="sender_id" id="sender_id<?php echo $val['id'];?>" value="<?php echo $session['id'];?>">
+                        <input type="hidden" name="receiver_id" id="receiver_id<?php echo $val['id'];?>" value="<?php echo $val['doctor_id'];?>">
+
                         <textarea  class="form-control" id="message<?php echo $val['id'];?>" rows="3"></textarea> 
                     </div>
                    
@@ -170,8 +202,8 @@ function approve_appointment(id){
 
 function send_message(id){
     var message = $('#message'+id).val();
-    var sender_id = $('#sender_id').val();
-    var receiver_id = $('#receiver_id').val();
+    var sender_id = $('#sender_id'+id).val();
+    var receiver_id = $('#receiver_id'+id).val();
     $.ajax({
 
         type: "POST",

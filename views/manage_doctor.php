@@ -28,9 +28,11 @@ check_login();
                     <div class="border-0 mb-4">
                         <div class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
                             <h3 class="fw-bold mb-0">Doctor</h3>
+                            <?php if($session['role'] == 'admin'){?>
                             <div class="col-auto d-flex w-sm-100">
                                 <a href="./add_doctor.php" class="btn btn-primary btn-set-task w-sm-100" ><i class="icofont-plus-circle me-2 fs-6"></i>Add Doctor</a>
                             </div>
+                            <?php }?>
                         </div>
                     </div>
                 </div> <!-- Row end  -->

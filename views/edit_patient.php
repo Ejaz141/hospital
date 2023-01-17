@@ -13,7 +13,7 @@ include './sidebar.php';
 // }
 if (isset($_POST['firstname'])) {
     $id = $_POST['id'];
-    $name = $_POST['firstname'] . ' ' . $_POST['lastname'];
+    $name = $_POST['name'];
     $email = $_POST['email'];
     $phonenumber = $_POST['phonenumber'];
     $role = 'Patient';
@@ -24,8 +24,8 @@ if (isset($_POST['firstname'])) {
     $confirm_password = $_POST['confirm_password'];
 
     $img_location = $_FILES['image']['tmp_name'];
-    $img_name = $_FILES['image']['name'];
-    $img_destination = "../assets/images/store/" . $img_name;
+    $img_name = $_FILES['image']['name'].date('dmyhis');
+    $img_destination = "../assets/images/patient/" . $img_name;
     move_uploaded_file($img_location, $img_destination);
 
     $update_query = "UPDATE users SET name = '$name', email = '$email', phonenumber = '$phonenumber', role = '$role', image = '$img_name', gender = '$gender', prescription = '', password = '$password'   WHERE id = '$id'";
@@ -73,14 +73,9 @@ if (isset($_POST['firstname'])) {
                                         <div class="col-md-6">
 
                                             <label for="firstname" class="form-label">First Name</label>
-                                            <input type="text" name="firstname" value="<?php $first_name = explode(' ', $row['name'], 2);
-        echo $first_name[0];?>" class="form-control" id="firstname" required>
+                                            <input type="text" name="firstname" value="<?php echo $row['name'];?>" class="form-control" id="firstname" required>
                                         </div>
-                                        <div class="col-md-6">
-                                            <label for="lastname" class="form-label">Last Name</label>
-                                            <input type="text" name="lastname" value="<?php $last_name = explode(' ', $row['name'], 2);
-        echo $last_name[1];?>" class="form-control" id="lastname" required>
-                                        </div>
+                                      
                                         <div class="col-md-6">
                                             <label for="phonenumber" class="form-label">Phone Number</label>
                                             <input type="text" name="phonenumber" value="<?php echo $row['phonenumber']; ?>" class="form-control" id="phonenumber" required>
@@ -99,7 +94,8 @@ if (isset($_POST['firstname'])) {
                                         </div>
                                         <div class="col-md-6">
                                             <label for="formFileMultiple" class="form-label"> Document Upload</label>
-                                            <input class="form-control" type="file" name="image" value="<?php echo $row['image']; ?>" id="formFileMultiple" multiple required>
+                                            <input class="form-control" type="file" name="image" id="formFileMultiple" multiple required>
+                                            <img src="../assets/images/patient/<?php echo $row['image'];?>" alt="" width="100px" height="100px">
                                         </div>
                                         <div class="col-md-6">
                                             <label  class="form-label">Gender</label>
@@ -125,6 +121,7 @@ if (isset($_POST['firstname'])) {
                                     </div>
 
                                     <input type="submit" class="btn btn-success text-light mt-4" name="update" value="Update">
+                                    <a href="./manage_patient.php" class="btn btn-secondary mt-4">Cancel</a>
                                 </form>
                                 <?php }
 }?>

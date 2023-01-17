@@ -1,12 +1,14 @@
 <?php
 session_start();
 //error_reporting(0);
-include('../include/config.php');
 include('../include/checklogin.php');
+check_login();
+include('../include/config.php');
+
 include('./sidebar.php');
 include('./header.php');
 
-check_login();
+
     $row = array(); 
     if($session['role'] == 'admin'){
         $sql = "SELECT * FROM appointment";
@@ -136,9 +138,14 @@ check_login();
                        <p><span style="color:orange"><?php echo $user_row['name']?>:</span>  <?php echo $notification['sender_message']?></p>
                     </div>
                     <?php }?>
-                    <?php if($notification['receiver_message']){?>
+                    <?php if($notification['receiver_message']){
+                        $user_row = array(); 
+                        $user_sql = "SELECT * FROM users where id = '{$notification['receiver_id']}'";
+                        $user_res = mysqli_query($con, $user_sql);
+                        $user_row = mysqli_fetch_assoc($user_res);
+                        ?>
                     <div class="mb-3">
-                        <p><span style="color:green">Your Reply: </span><?php echo $notification['receiver_message']?></p>
+                        <p><span style="color:green"><?php echo $user_row['name']?>: </span><?php echo $notification['receiver_message']?></p>
                     </div>
                     <?php 
                     }
@@ -146,8 +153,8 @@ check_login();
                     ?>
                     <div class="mb-3">
                         <label for="item1" class="form-label">Message</label>
-                        <input type="hidden" name="sender_id" id="sender_id" value="<?php echo $session['id'];?>">
-                        <input type="hidden" name="receiver_id" id="receiver_id" value="<?php echo $val['doctor_id'];?>">
+                        <input type="hidden" name="sender_id" id="sender_id<?php echo $val['id'];?>" value="<?php echo $session['id'];?>">
+                        <input type="hidden" name="receiver_id" id="receiver_id<?php echo $val['id'];?>" value="<?php echo $val['doctor_id'];?>">
 
                         <textarea  class="form-control" id="message<?php echo $val['id'];?>" rows="3"></textarea> 
                     </div>
@@ -219,10 +226,8 @@ function approve_appointment(id){
 
 function send_message(id){
     var message = $('#message'+id).val();
-    var sender_id = $('#sender_id').val();
-    var receiver_id = $('#receiver_id').val();
-    alert(sender_id);
-    alert(receiver_id);
+    var sender_id = $('#sender_id'+id).val();
+    var receiver_id = $('#receiver_id'+id).val();
     $.ajax({
 
         type: "POST",
